@@ -40,7 +40,36 @@
 /* ###################################################### */
 
 /* Home Page */
+.home-page {
+    height: 100vh;
+    background-color: red;
+}
+
+.home-page-top {
+    background-image: url('../sleek-pic.jpg');
+    height: 60vh;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+}
+
+.home-page-title {
+    color: white;
+    text-align: center;
+}
+
 #recipes-container {
-    width: 80%;
+    width: 70%;
     margin: 0 auto;
+    text-align: center;
+    padding: 4px;
+}
+
+.heart-vegtable {
+    text-align: center;
+}
+.heart-vegtable img{
+    height: 100px;
+    height: 100px;
 }
