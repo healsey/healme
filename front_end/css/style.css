@@ -1,0 +1,46 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+/* Welcome Page */
+
+#welcome-page {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#welcome-page video {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    object-fit: cover;
+}
+
+.welcome-button {
+    /* border: 2px solid gray; */
+    background-color: rgb(220,220,220, 0.2);
+    color: white;
+    font-size: 40px;
+    text-align: center;
+}
+
+.company-name {
+    color: white;
+    font-size: 60px;
+    text-align: center;
+}
+
+/* ###################################################### */
+
+/* Home Page */
+#recipes-container {
+    width: 80%;
+    margin: 0 auto;
+}
