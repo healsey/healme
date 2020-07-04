@@ -33,6 +33,7 @@ function displayRecipe(recipe){
     const divTag = document.createElement('div')
     divTag.classList.add('col', 'mb-4')
     divTag.innerHTML += `
+    <div class="card-container">
         <div class="card" >
             <img src="${recipe.image}" class="card-img-top" alt="...">
             <div class="card-body">
@@ -41,10 +42,24 @@ function displayRecipe(recipe){
                 <a class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
+
+        <div class="recipe-detail">
+            <div class="jumbotron">
+                <h1 class="display-4">${recipe.label}</h1>
+                <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                <hr class="my-4">
+                <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+                <p class="lead">
+                <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+                </p>
+            </div>
+        </div>
+    </div>
     `
     recipesContainer.append(divTag)
 
-    divTag.addEventListener('click', displayRecipeDetail)
+    const cardContainer = divTag.querySelector('.card-container')
+    divTag.addEventListener('click', () => displayRecipeDetail(cardContainer))
 }
 
 
@@ -112,8 +127,8 @@ function createCheckbox(name, mainTag){
 
 
 //helper method to display the recipe details 
-function displayRecipeDetail(recipe){
-    
+function displayRecipeDetail(cardContainer){
+    cardContainer.classList.add('rotate-recipe')
 }
 
 

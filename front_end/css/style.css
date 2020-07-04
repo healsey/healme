@@ -113,3 +113,29 @@
     text-align: center;
     padding: 4px;
 }
+
+/* Displaying the Recipe Detail */
+
+.card-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* transition: transform 1s; */
+    transition: all 0.5s ease;
+    transform-style: preserve-3d;
+}
+
+
+.card {
+    backface-visibility: hidden;
+    position: absolute;
+}
+
+ .rotate-recipe {
+    transform: rotateY(180deg);
+  } 
+
+.recipe-detail {
+    backface-visibility: hidden;
+    transform: rotateY( 180deg );
+}
