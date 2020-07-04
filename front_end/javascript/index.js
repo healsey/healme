@@ -43,10 +43,13 @@ function displayRecipe(recipe){
         </div>
     `
     recipesContainer.append(divTag)
+
+    divTag.addEventListener('click', displayRecipeDetail)
 }
 
-//filteration by health condition 
 
+
+//filteration by health condition 
 const healthConditionDiv = document.querySelector('#health-condition-div')
 
 const healthConditions = ["Diabetes", "Hypertension", "High Cholestrol", "Alzheimers"]
@@ -104,6 +107,15 @@ function createCheckbox(name, mainTag){
 
     mainTag.append(divTag)
 }
+
+
+
+
+//helper method to display the recipe details 
+function displayRecipeDetail(recipe){
+    
+}
+
 
 const recipe = {
     "uri": "http://www.edamam.com/ontologies/edamam.owl#recipe_4bb99424e1bbc40d3cd1d891883d6745",
