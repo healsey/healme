@@ -45,8 +45,39 @@ function displayRecipe(recipe){
     recipesContainer.append(divTag)
 }
 
+const healthConditionForm = document.querySelector('#health-condition-form')
+const healthConditionTag = document.querySelector("#health-condition-filter")
 
+const healthConditions = ["Diabetes", "Hypertension", "High Cholestrol", "Alzheimers"]
+healthConditions.forEach(condition => {
+    const id = condition.toLowerCase().replace(" ", "-")
+    const divTag = document.createElement('div')
+    divTag.classList.add("form-check")
+    divTag.innerHTML = `
+        <input class="form-check-input" type="checkbox" value="" id="${id}">
+        <label class="form-check-label" for="${id}">
+        ${condition}
+        </label>
+    `
+    const input = divTag.querySelector('input')
+    input.addEventListener("change", (e) => {
+        // console.log(e.target.checked)
+        if (e.target.checked){
+        
+        } else {
 
+        }
+        //console.log(e.target.id)
+    })
+
+    healthConditionForm.append(divTag)
+})
+healthConditionTag.click()
+
+healthConditionForm.addEventListener('submit', (e)=> {
+    e.preventDefault()
+    console.log(e.target)
+})
 
 const recipe = {
     "uri": "http://www.edamam.com/ontologies/edamam.owl#recipe_4bb99424e1bbc40d3cd1d891883d6745",
