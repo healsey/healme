@@ -45,23 +45,55 @@ function displayRecipe(recipe){
     recipesContainer.append(divTag)
 }
 
-const healthConditionForm = document.querySelector('#health-condition-form')
-const healthConditionTag = document.querySelector("#health-condition-filter")
+//filteration by health condition 
+
+const healthConditionDiv = document.querySelector('#health-condition-div')
 
 const healthConditions = ["Diabetes", "Hypertension", "High Cholestrol", "Alzheimers"]
 healthConditions.forEach(condition => {
-    const id = condition.toLowerCase().replace(" ", "-")
+    createCheckbox(condition, healthConditionDiv)
+})
+
+const healthConditionTag = document.querySelector("#health-condition-filter")
+healthConditionTag.click()  //open health conditons selection when page initially loads 
+
+
+
+
+//filteration by allergies 
+const allergies = ["Eggs", "Dairy", "Fish", "Gluten", "Peanuts", "Tree Nuts", "Lupine", "Mustard"]
+const allergenDiv = document.querySelector('#allergens-div')
+
+allergies.forEach(allergy => {
+    createCheckbox(allergy, allergenDiv)
+})
+
+
+
+
+//all api filteration
+const apiOptions = ["Balanced", "High-Fiber", "High-Protein", "Low-Carb", "Low-Fat", "Low-Sodium", "Alcohol-free", "Immune-Supportive", "Celery-free","Crustcean-free","Dairy","Eggs","Fish","FODMAP free","Gluten","Keto","Kidney friendly","Kosher","Low potassium","Lupine-free","Mustard-free","No oil added","No-sugar","Paleo","Peanuts","Pescatarian","Pork-free","Red meat-free","Sesame-free","Shellfish","Soy","Sugar-conscious","Tree Nuts","Vegan","Vegetarian","Wheat-free"]
+const allFilterDiv = document.querySelector('#all-filter-div')
+apiOptions.forEach(option => {
+    createCheckbox(option, allFilterDiv)
+})
+
+
+
+
+//helper method to create checkbox items 
+function createCheckbox(name, mainTag){
+    const id = name.toLowerCase().replace(" ", "-")
     const divTag = document.createElement('div')
     divTag.classList.add("form-check")
     divTag.innerHTML = `
         <input class="form-check-input" type="checkbox" value="" id="${id}">
         <label class="form-check-label" for="${id}">
-        ${condition}
+        ${name}
         </label>
     `
     const input = divTag.querySelector('input')
     input.addEventListener("change", (e) => {
-        // console.log(e.target.checked)
         if (e.target.checked){
         
         } else {
@@ -70,14 +102,8 @@ healthConditions.forEach(condition => {
         //console.log(e.target.id)
     })
 
-    healthConditionForm.append(divTag)
-})
-healthConditionTag.click()
-
-healthConditionForm.addEventListener('submit', (e)=> {
-    e.preventDefault()
-    console.log(e.target)
-})
+    mainTag.append(divTag)
+}
 
 const recipe = {
     "uri": "http://www.edamam.com/ontologies/edamam.owl#recipe_4bb99424e1bbc40d3cd1d891883d6745",
@@ -106,3 +132,6 @@ const recipe = {
     "2 teaspoons (6g) Japanese matcha green tea (see note above)",
     "8 ounces (235ml) cold water"
     ]}
+
+
+ 
