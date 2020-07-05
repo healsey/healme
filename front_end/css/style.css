@@ -105,7 +105,7 @@
 
 
 #filters {
-    margin-left: 10px;
+    margin-left: 20px;
     width: 20%;
 }
 
@@ -126,14 +126,16 @@
 .modal-content {
     background-color: lightgray;
     padding: 5px;
-    /* width: 70vw; */
 }
-.modal-dialog {
-    width: 800px;
+
+.modal-footer {
+    justify-content: space-between;
 }
+
 .image-container {
     text-align: center;
 }
+
 .modal-body img {
     border-radius: 2rem;
     text-align: center;
@@ -142,6 +144,33 @@
 
 .health-span {
     margin: 2px;
-  
 }
 
+.diet-span {
+    margin: 2px;
+}
+
+/* .ingredients-list li{
+    list-style-type: decimal;
+} */
+
+.ingredients-list{
+    counter-reset: list-counter;
+    list-style: none;
+    float:left;
+}
+
+.ingredients-list li{
+     margin: 1.5em 0;
+    line-height: 1em
+}
+
+.ingredients-list li:before{
+    content: counter(list-counter);
+    counter-increment: list-counter;
+    font-family: arial;
+    color: black;
+    font: bold;
+    font-size: 1.5em;
+    margin-right: .5em;
+}

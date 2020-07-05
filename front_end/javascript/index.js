@@ -138,7 +138,7 @@ function displayRecipeDetail(recipe){
 
     dietLabels.innerHTML = ""
     recipe.dietLabels.forEach(label => {
-        dietLabels.innerHTML += `<span> ${label} </span>`
+        dietLabels.innerHTML += `<span class="diet-span">* ${label} </span>`
     })
 
     healthLabels.innerHTML = ""
