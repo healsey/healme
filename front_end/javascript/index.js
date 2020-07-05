@@ -1,3 +1,5 @@
+//Applied Recipe Filters
+const appliedFilters = [] 
 //welcome page 
 const welcomeButton = document.querySelector('.welcome-button')
 const welcomeContainer = document.querySelector('#welcome-page')
@@ -104,11 +106,11 @@ function createCheckbox(name, mainTag){
     const input = divTag.querySelector('input')
     input.addEventListener("change", (e) => {
         if (e.target.checked){
-        
+            appliedFilters.push(e.target.id)
         } else {
-
+            appliedFilters.splice(appliedFilters.indexOf(e.target.id), 1)
         }
-        //console.log(e.target.id)
+        
     })
 
     mainTag.append(divTag)
@@ -151,7 +153,7 @@ function displayRecipeDetail(recipe){
 }
 
 
-//display + or - next to each filter header 
+//******************* display '+' or '-' next to each filter header **********************
 
 function filterToggler(e){
     if(e.target.ariaExpanded == 'true'){
@@ -169,6 +171,8 @@ healthConditionTag.addEventListener('click', (e) => filterToggler(e))
 healthConditionTag.click()  //open health conditons selection when page initially loads 
 allergensFilterTag.addEventListener('click', (e) => filterToggler(e))
 allFilterTag.addEventListener('click', (e) => filterToggler(e))
+
+
 
 
 
