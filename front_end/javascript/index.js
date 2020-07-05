@@ -16,23 +16,46 @@ welcomeButton.addEventListener('click', () => {
 
 //home page
 function recipesFetch(){
-    // fetch('http://localhost:3000/health_conditions', {diet: "hey", me: "what"})
-    // .then(resp => resp.json())
-    // .then(data => {
-    //     console.log(data.hits)
-    //     data.hits.forEach(recipe => {
-    //         displayRecipe(recipe.recipe)
-    //     })
-        
-    // })
-    displayRecipe(recipe)
-    displayRecipe(recipe)
-    displayRecipe(recipe)
-    displayRecipe(recipe)
-    displayRecipe(recipe)
-    displayRecipe(recipe)
+    fetch('http://localhost:3000/health_conditions')
+    .then(resp => resp.json())
+    .then(data => {
+        data.hits.forEach(recipe => {
+            displayRecipe(recipe.recipe)
+        }) 
+    })
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
 }
 
+function filtersFetch(){
+    const obj = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        },
+        body: JSON.stringify(appliedFilters)
+    }
+
+    fetch('http://localhost:3000/health_conditions', obj)
+    .then(resp => resp.json())
+    .then(data => {
+        console.log(data)
+        data.hits.forEach(recipe => {
+            displayRecipe(recipe.recipe)
+        }) 
+    })
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
+    // displayRecipe(recipe)
+}
 
 
 function displayRecipe(recipe){
@@ -83,7 +106,7 @@ allergies.forEach(allergy => {
 
 
 //all api filteration
-const apiOptions = ["Balanced", "High-Fiber", "High-Protein", "Low-Carb", "Low-Fat", "Low-Sodium", "Alcohol-free", "Immune-Supportive", "Celery-free","Crustcean-free","Dairy","Eggs","Fish","FODMAP free","Gluten","Keto","Kidney friendly","Kosher","Low potassium","Lupine-free","Mustard-free","No oil added","No-sugar","Paleo","Peanuts","Pescatarian","Pork-free","Red meat-free","Sesame-free","Shellfish","Soy","Sugar-conscious","Tree Nuts","Vegan","Vegetarian","Wheat-free"]
+const apiOptions = ["Balanced", "High-Fiber", "High-Protein", "Low-Carb", "Low-Fat", "Low-Sodium", "Alcohol-free", "Immune-Supportive", "Celery-free","Crustcean-free","Fish","FODMAP free","Gluten","Keto","Kidney friendly","Kosher","Low potassium","Lupine-free","Mustard-free","No oil added","No-sugar","Paleo","Peanuts","Pescatarian","Pork-free","Red meat-free","Sesame-free","Shellfish","Soy","Sugar-conscious","Tree Nuts","Vegan","Vegetarian","Wheat-free"]
 const allFilterDiv = document.querySelector('#all-filter-div')
 apiOptions.forEach(option => {
     createCheckbox(option, allFilterDiv)
@@ -110,7 +133,7 @@ function createCheckbox(name, mainTag){
         } else {
             appliedFilters.splice(appliedFilters.indexOf(e.target.id), 1)
         }
-        
+        filtersFetch()
     })
 
     mainTag.append(divTag)
@@ -127,6 +150,11 @@ function displayRecipeDetail(recipe){
     const ingredientsList = document.querySelector('.ingredients-list')
     const dietLabels = document.querySelector('.diet-labels')
     const healthLabels = document.querySelector('.health-labels')
+    const caloriesTag = document.querySelector('.calories')
+    const dishTypeTag = document.querySelector('.dishType')
+
+    caloriesTag.innerText = recipe.calories.toFixed(0)
+    dishTypeTag.innerText = recipe.dishType 
 
     image.src = recipe.image
     title.innerText = recipe.label 
@@ -145,7 +173,7 @@ function displayRecipeDetail(recipe){
 
     healthLabels.innerHTML = ""
     recipe.healthLabels.forEach(label => {
-        healthLabels.innerHTML += `<span class="health-span">&#10003; ${label} </span>`
+        healthLabels.innerHTML += `<span class="health-span"><span style="color:green">&#10003;</span> ${label} </span>`
     })
 
     $('#recipeModal').modal();

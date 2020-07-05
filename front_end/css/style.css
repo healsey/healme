@@ -150,27 +150,17 @@
     margin: 2px;
 }
 
-/* .ingredients-list li{
-    list-style-type: decimal;
-} */
 
-.ingredients-list{
-    counter-reset: list-counter;
-    list-style: none;
-    float:left;
+.health-labels {
+    display: flexbox;
+    flex-wrap: wrap;
 }
 
-.ingredients-list li{
-     margin: 1.5em 0;
-    line-height: 1em
+.health-span {
+    display: inline-block;
 }
 
-.ingredients-list li:before{
-    content: counter(list-counter);
-    counter-increment: list-counter;
-    font-family: arial;
-    color: black;
-    font: bold;
-    font-size: 1.5em;
-    margin-right: .5em;
+
+.ingredients-list {
+    margin: 10px;
 }
