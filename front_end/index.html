@@ -37,17 +37,18 @@
         
         <div class="home-page-middle">
             <div id="filters">
-                <p id="health-condition-filter" data-toggle="collapse" aria-controls="collapseExample"  data-target="#health-condition-div">Health Conditions</p>
+                <h4>Filter By</h4>
+                <p id="health-condition-filter" data-toggle="collapse" aria-controls="collapseExample"  data-target="#health-condition-div">Health Conditions <span>+</span></span></p>
                 <div class="collapse" id="health-condition-div">
                     <!-- Health conditions selections  -->
                 </div>
-
-                <p id="allergens-filter" data-toggle="collapse" aria-controls="collapseExample"  data-target="#allergens-div">Allergies</p>
+                <hr>
+                <p id="allergens-filter" data-toggle="collapse" aria-controls="collapseExample"  data-target="#allergens-div">Allergies <span>+</span></p>
                 <div class="collapse" id="allergens-div">
                     <!-- Allergens selections  -->
                 </div>
-
-                <p id="all-filter" data-toggle="collapse" aria-controls="collapseExample"  data-target="#all-filter-div">Additional Options</p>
+                <hr>
+                <p id="all-filter" data-toggle="collapse" aria-controls="collapseExample"  data-target="#all-filter-div">Additional Options <span>+</span></p>
                 <div class="collapse" id="all-filter-div">
                     <!-- API selections  -->
                 </div>
@@ -57,6 +58,40 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Modal to display details for a single recipe -->
+
+    <div class="modal fade" id="recipeModal" tabindex="-1" role="dialog" aria-labelledby="recipeModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="recipeModalTitle">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="image-container">
+                    <img src="" class="modal-image" >
+                </div>
+                <hr>
+                <div>
+                    <h5>Ingredients</h5>
+                    <ul class="ingredients-list">
+                    </ul>
+                    <h5>Diet Labels</h5>
+                    <div class="diet-labels"></div>
+                    <h5>Health Labels</h5>
+                    <div class="health-labels"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p>Prep Time: <span>17 minutes</span> Calroies: <span>500</span></p>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
     </div>
 </body>
 </html>

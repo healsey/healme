@@ -14,10 +14,14 @@ welcomeButton.addEventListener('click', () => {
 
 //home page
 function recipesFetch(){
-    // fetch('http://localhost:3000/health_conditions')
+    // fetch('http://localhost:3000/health_conditions', {diet: "hey", me: "what"})
     // .then(resp => resp.json())
     // .then(data => {
-    //     console.log(data)
+    //     console.log(data.hits)
+    //     data.hits.forEach(recipe => {
+    //         displayRecipe(recipe.recipe)
+    //     })
+        
     // })
     displayRecipe(recipe)
     displayRecipe(recipe)
@@ -38,28 +42,17 @@ function displayRecipe(recipe){
             <img src="${recipe.image}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">${recipe.label}</h5>
-                <p class="card-text">Sugar-Concious</p>
-                <a class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-
-        <div class="recipe-detail">
-            <div class="jumbotron">
-                <h1 class="display-4">${recipe.label}</h1>
-                <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-                <hr class="my-4">
-                <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-                <p class="lead">
-                <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-                </p>
+                <p class="card-text">${recipe.healthLabels[0]}</p>
+                <button class="btn btn-outline-dark">View Details</button>
             </div>
         </div>
     </div>
     `
     recipesContainer.append(divTag)
 
-    const cardContainer = divTag.querySelector('.card-container')
-    divTag.addEventListener('click', () => displayRecipeDetail(cardContainer))
+    //const cardContainer = divTag.querySelector('.card-container')
+    const detailsBtn = divTag.querySelector('button') 
+    detailsBtn.addEventListener('click', () => displayRecipeDetail(recipe))
 }
 
 
@@ -72,8 +65,6 @@ healthConditions.forEach(condition => {
     createCheckbox(condition, healthConditionDiv)
 })
 
-const healthConditionTag = document.querySelector("#health-condition-filter")
-healthConditionTag.click()  //open health conditons selection when page initially loads 
 
 
 
@@ -127,9 +118,58 @@ function createCheckbox(name, mainTag){
 
 
 //helper method to display the recipe details 
-function displayRecipeDetail(cardContainer){
-    cardContainer.classList.add('rotate-recipe')
+function displayRecipeDetail(recipe){
+    // cardContainer.classList.add('rotate-recipe')
+    const image = document.querySelector('.modal-image')
+    const title = document.querySelector('.modal-title')
+    const ingredientsList = document.querySelector('.ingredients-list')
+    const dietLabels = document.querySelector('.diet-labels')
+    const healthLabels = document.querySelector('.health-labels')
+
+    image.src = recipe.image
+    title.innerText = recipe.label 
+    
+    ingredientsList.innerHTML = ""
+    recipe.ingredientLines.forEach(ingr => {
+        const liTag = document.createElement('li')
+        liTag.innerText = ingr
+        ingredientsList.append(liTag)
+    })
+
+    dietLabels.innerHTML = ""
+    recipe.dietLabels.forEach(label => {
+        dietLabels.innerHTML += `<span> ${label} </span>`
+    })
+
+    healthLabels.innerHTML = ""
+    recipe.healthLabels.forEach(label => {
+        healthLabels.innerHTML += `<span class="health-span">&#10003; ${label} </span>`
+    })
+
+    $('#recipeModal').modal();
+    
 }
+
+
+//display + or - next to each filter header 
+
+function filterToggler(e){
+    if(e.target.ariaExpanded == 'true'){
+        e.target.childNodes[1].innerText = "+"
+    } else {
+        e.target.childNodes[1].innerText = "-"
+    }
+}
+
+const healthConditionTag = document.querySelector("#health-condition-filter")
+const allergensFilterTag = document.querySelector("#allergens-filter")
+const allFilterTag = document.querySelector("#all-filter")
+
+healthConditionTag.addEventListener('click', (e) => filterToggler(e))
+healthConditionTag.click()  //open health conditons selection when page initially loads 
+allergensFilterTag.addEventListener('click', (e) => filterToggler(e))
+allFilterTag.addEventListener('click', (e) => filterToggler(e))
+
 
 
 const recipe = {
@@ -158,7 +198,11 @@ const recipe = {
     "ingredientLines": [
     "2 teaspoons (6g) Japanese matcha green tea (see note above)",
     "8 ounces (235ml) cold water"
-    ]}
+    ]
+}
 
 
  
+
+    
+   
