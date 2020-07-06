@@ -1,3 +1,5 @@
+//loading status
+const loader = document.querySelector('.loading')
 //Applied Recipe Filters
 const appliedFilters = [] 
 //welcome page 
@@ -16,19 +18,19 @@ welcomeButton.addEventListener('click', () => {
 
 //home page
 function recipesFetch(){
-    fetch('http://localhost:3000/health_conditions')
-    .then(resp => resp.json())
-    .then(data => {
-        data.hits.forEach(recipe => {
-            displayRecipe(recipe.recipe)
-        }) 
-    })
-    // displayRecipe(recipe)
-    // displayRecipe(recipe)
-    // displayRecipe(recipe)
-    // displayRecipe(recipe)
-    // displayRecipe(recipe)
-    // displayRecipe(recipe)
+    // fetch('http://localhost:3000/health_conditions')
+    // .then(resp => resp.json())
+    // .then(data => {
+    //     data.hits.forEach(recipe => {
+    //         displayRecipe(recipe.recipe)
+    //     }) 
+    // })
+    displayRecipe(recipe)
+    displayRecipe(recipe)
+    displayRecipe(recipe)
+    displayRecipe(recipe)
+    displayRecipe(recipe)
+    displayRecipe(recipe)
 }
 
 function filtersFetch(){
@@ -230,7 +232,9 @@ const recipe = {
     "ingredientLines": [
     "2 teaspoons (6g) Japanese matcha green tea (see note above)",
     "8 ounces (235ml) cold water"
-    ]
+    ],
+    'dishtype': 'dinner',
+    'calories': 500
 }
 
 
