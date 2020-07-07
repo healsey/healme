@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    skip_before_action :authenticate_request 
+    #skip_before_action :authenticate_request 
 
     def create
         email = params["email"]
@@ -29,6 +29,7 @@ class UsersController < ApplicationController
     def login
         command = AuthenticateUser.call(params["email"], params["password"])
         if command.success?
+            byebug
             render json: { auth_token: command.result }
         else
             render json: { error: command.errors }, status: :unauthorized

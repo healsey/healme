@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   
+  post "/users/login" => 'users#login'
+  get "/recipes/:filtered_recipes" => 'recipes#filtered_recipes'
+
   resources :user_allergies
   resources :allergies
   resources :recipe_users
@@ -7,7 +10,7 @@ Rails.application.routes.draw do
   resources :recipes
   resources :health_conditions
 
-  post "/users/login" => 'users#login'
+
   
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
