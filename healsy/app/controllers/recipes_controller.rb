@@ -1,9 +1,8 @@
-class HealthConditionsController < ApplicationController
-
-    def index 
+class RecipesController < ApplicationController
+     def index 
         # conditions = HealthCondition.all
         # render json: conditions
-        url = "https://api.edamam.com/search?q='chicken'&app_id=63149c77&app_key=a850c45e6565a7cd23cf7065a04a774c"
+        url = "https://api.edamam.com/search?q='egg'&app_id=63149c77&app_key=a850c45e6565a7cd23cf7065a04a774c"
         data = RestClient.get(url)
 
         # RestClient.get(url, {params:{health: ["fish-free", "egg-free"]}}) {|response, request, result| byebug }
@@ -12,8 +11,4 @@ class HealthConditionsController < ApplicationController
         render json: data
     end 
 
-
-    def create
-
-    end 
 end
