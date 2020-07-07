@@ -15,41 +15,79 @@ welcomeButton.addEventListener("click", () => {
   recipesFetch();
 });
 
+function urlQueryStringGenerator(){
+  const health = []
+  let diet = null 
+  appliedFilters.forEach(condition => {
+    //if (condition === "diabetes" || condition === "high-cholesterol" || condition === "hypertension" || condition === "alzheimers") {
+
+      switch(condition){
+        case "diabetes":
+          diet = "diet=low-carb"
+          break;
+        case "high-cholesterol":
+          diet = "diet=low-fat"
+        break;
+        case "hypertension":
+          diet = "diet=low-sodium"
+        break;
+        case "alzheimers":
+          diet = "diet=balanced"
+        break;
+        default:
+          health.push(`health=${condition}`);
+      }
+   
+  })
+
+  let healthString = health.join("&");
+
+  if (diet && health.length > 0){
+    return `${healthString}&${diet}`
+  }else if(health.length > 0) {
+    return `${healthString}`
+  }else {
+    return `${diet}`
+  }
+ 
+}
+
 //home page
 function recipesFetch() {
-  // fetch('http://localhost:3000/recipes')
-  // .then(resp => resp.json())
-  // .then(data => {
-  //     data.hits.forEach(recipe => {
-  //         displayRecipe(recipe.recipe)
-  //     })
-  // })
-  displayRecipe(recipe);
-  displayRecipe(recipe);
-  displayRecipe(recipe);
-  displayRecipe(recipe);
-  displayRecipe(recipe);
-  displayRecipe(recipe);
+  console.log('called')
+  fetch('http://localhost:3000/recipes')
+  .then(resp => resp.json())
+  .then(data => {
+    console.log(data)
+      data.hits.forEach(recipe => {
+          displayRecipe(recipe.recipe)
+      })
+  })
+  // displayRecipe(recipe);
+  // displayRecipe(recipe);
+  // displayRecipe(recipe);
+  // displayRecipe(recipe);
+  // displayRecipe(recipe);
+  // displayRecipe(recipe);
 }
 
 function filtersFetch() {
-  const obj = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify(appliedFilters),
-  };
+  
+  let customUrl = urlQueryStringGenerator()
+  console.log(customUrl)
+  if (customUrl === "null"){
+     recipesFetch()
+  }else {
 
-  fetch("http://localhost:3000/recipes", obj)
+  fetch(`http://localhost:3000/recipes/${customUrl}`)
     .then((resp) => resp.json())
     .then((data) => {
-      console.log(data);
+      recipesContainer.innerHTML = ''
       data.hits.forEach((recipe) => {
         displayRecipe(recipe.recipe);
       });
     });
+  }
   // displayRecipe(recipe)
   // displayRecipe(recipe)
   // displayRecipe(recipe)
@@ -95,14 +133,14 @@ healthConditions.forEach((condition) => {
 
 //filteration by allergies
 const allergies = [
-  "Eggs",
-  "Dairy",
-  "Fish",
-  "Gluten",
-  "Peanuts",
-  "Tree Nuts",
-  "Lupine",
-  "Mustard",
+  "Egg Free",
+  "Dairy Free",
+  "Fish Free",
+  "Gluten Free",
+  "Peanut Free",
+  "Tree Nuts Free",
+  "Lupine Free",
+  "Mustard Free",
 ];
 const allergenDiv = document.querySelector("#allergens-div");
 
@@ -112,12 +150,6 @@ allergies.forEach((allergy) => {
 
 //all api filteration
 const apiOptions = [
-  "Balanced",
-  "High-Fiber",
-  "High-Protein",
-  "Low-Carb",
-  "Low-Fat",
-  "Low-Sodium",
   "Alcohol-free",
   "Immune-Supportive",
   "Celery-free",
@@ -167,12 +199,30 @@ function createCheckbox(name, mainTag) {
   input.addEventListener("change", (e) => {
     if (e.target.checked) {
       appliedFilters.push(e.target.id);
+      if(mainTag.id === 'health-condition-div'){
+        const inputs = mainTag.querySelectorAll('input')
+        inputs.forEach(inn => {  
+          if(inn.id !== e.target.id ){
+          inn.disabled = true
+          }
+        })
+      }
     } else {
+      if(mainTag.id === 'health-condition-div'){
+        const inputs = mainTag.querySelectorAll('input')
+        inputs.forEach(inn => {  
+          inn.disabled = false
+        })
+      }
+
       appliedFilters.splice(appliedFilters.indexOf(e.target.id), 1);
     }
+
     filtersFetch();
+
   });
 
+  
   mainTag.append(divTag);
 }
 
@@ -246,13 +296,15 @@ $("#auth-form")[0].addEventListener("submit", (e) => {
   e.preventDefault();
   if ($("#modal-title")[0].innerText === "Register") {
     // console.log("registration", e.target.email.value);
-    registerUser(e.target.name.value, e.target.email.value);
+    registerUser(e.target.name.value, e.target.email.value, e.target.password.value);
   } else {
     console.log("login", e.target.email.value);
+    loginUser(e.target.email.value, e.target.password.value)
   }
+  e.target.reset()
 });
 
-function registerUser(name, email) {
+function registerUser(name, email, password) {
   fetch("http://localhost:3000/users", {
     method: "POST",
     headers: {
@@ -262,12 +314,32 @@ function registerUser(name, email) {
     body: JSON.stringify({
       name: name,
       email: email,
+      password: password
     }),
   })
     .then((response) => response.json())
     .then((obj) => {
       console.log(obj);
     });
+}
+
+function loginUser(email, password){
+  fetch("http://localhost:3000/users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    }),
+  })
+    .then((response) => response.json())
+    .then((obj) => {
+      console.log(obj);
+    });
+  
 }
 
 const healthConditionTag = document.querySelector("#health-condition-filter");
