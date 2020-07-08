@@ -9,9 +9,9 @@ class UsersController < ApplicationController
             render json: { message: "User already exists"}
         else
             user = User.create(name: name, email: email, password: password)
-            # byebug
+            command = AuthenticateUser.call(email, password)
 
-            render json: user
+            render json: {auth_token: command.result, user: user}
         end
     end
 
@@ -29,8 +29,8 @@ class UsersController < ApplicationController
     def login
         command = AuthenticateUser.call(params["email"], params["password"])
         if command.success?
-            # byebug
-            render json: { auth_token: command.result }
+            current_user = User.find_by(email: params[:email])
+            render json: { auth_token: command.result , user: current_user}
         else
             render json: { error: command.errors }, status: :unauthorized
         end

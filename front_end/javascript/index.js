@@ -1,5 +1,5 @@
 //loading status
-const loader = document.querySelector(".loading");
+const loader = document.querySelector(".loader");
 //Applied Recipe Filters
 const appliedFilters = [];
 //welcome page
@@ -15,12 +15,17 @@ welcomeButton.addEventListener("click", () => {
   recipesFetch();
 });
 
+//keeps user logged in after page refresh 
+const current_user = sessionStorage.getItem("healme_auth") 
+if(current_user !== "null"){
+  const parsed_user = JSON.parse(current_user)
+  navbarUpdateLoggedInStatus(parsed_user.user.name)
+}
+
 function urlQueryStringGenerator(){
   const health = []
   let diet = null 
   appliedFilters.forEach(condition => {
-    //if (condition === "diabetes" || condition === "high-cholesterol" || condition === "hypertension" || condition === "alzheimers") {
-
       switch(condition){
         case "diabetes":
           diet = "diet=low-carb"
@@ -54,46 +59,49 @@ function urlQueryStringGenerator(){
 
 //home page
 function recipesFetch() {
-  console.log('called')
-  fetch('http://localhost:3000/recipes')
-  .then(resp => resp.json())
-  .then(data => {
-    console.log(data)
-      data.hits.forEach(recipe => {
-          displayRecipe(recipe.recipe)
-      })
-  })
-  // displayRecipe(recipe);
-  // displayRecipe(recipe);
-  // displayRecipe(recipe);
-  // displayRecipe(recipe);
-  // displayRecipe(recipe);
-  // displayRecipe(recipe);
+  // loader.style.display = "initial"
+  // fetch('http://localhost:3000/recipes')
+  // .then(resp => resp.json())
+  // .then(data => {
+  //   console.log(data)
+  //     data.hits.forEach(recipe => {
+  //         displayRecipe(recipe.recipe)
+  //        loader.style.display = "none"
+  //     })
+  // })
+  displayRecipe(recipe);
+  displayRecipe(recipe);
+  displayRecipe(recipe);
+  displayRecipe(recipe);
+  displayRecipe(recipe);
+  displayRecipe(recipe);
 }
 
 function filtersFetch() {
-  
-  let customUrl = urlQueryStringGenerator()
-  console.log(customUrl)
-  if (customUrl === "null"){
-     recipesFetch()
-  }else {
+  // loader.style.display = "initial"
+  // console.log(JSON.parse(sessionStorage.getItem("healme_auth")))
+  // let customUrl = urlQueryStringGenerator()
+  // console.log(customUrl)
+  // if (customUrl === "null"){
+  //    recipesFetch()
+  // }else {
 
-  fetch(`http://localhost:3000/recipes/${customUrl}`)
-    .then((resp) => resp.json())
-    .then((data) => {
-      recipesContainer.innerHTML = ''
-      data.hits.forEach((recipe) => {
-        displayRecipe(recipe.recipe);
-      });
-    });
-  }
-  // displayRecipe(recipe)
-  // displayRecipe(recipe)
-  // displayRecipe(recipe)
-  // displayRecipe(recipe)
-  // displayRecipe(recipe)
-  // displayRecipe(recipe)
+  // fetch(`http://localhost:3000/recipes/${customUrl}`)
+  //   .then((resp) => resp.json())
+  //   .then((data) => {
+  //     recipesContainer.innerHTML = ''
+  //     data.hits.forEach((recipe) => {
+  //       displayRecipe(recipe.recipe);
+  //       loader.style.display = "none"
+  //     });
+  //   });
+  // }
+  displayRecipe(recipe)
+  displayRecipe(recipe)
+  displayRecipe(recipe)
+  displayRecipe(recipe)
+  displayRecipe(recipe)
+  displayRecipe(recipe)
 }
 
 function displayRecipe(recipe) {
@@ -302,6 +310,7 @@ $("#auth-form")[0].addEventListener("submit", (e) => {
     loginUser(e.target.email.value, e.target.password.value)
   }
   e.target.reset()
+  $("#registration-modal").modal('hide');
 });
 
 function registerUser(name, email, password) {
@@ -319,8 +328,23 @@ function registerUser(name, email, password) {
   })
     .then((response) => response.json())
     .then((obj) => {
-      console.log(obj);
+      if(obj.error){
+        //display the error to the user 
+      }else {
+      sessionStorage.setItem("healme_auth", JSON.stringify(obj)) 
+      navbarUpdateLoggedInStatus()
+      }
+      
     });
+}
+const loggoutBtn = document.querySelector('#logout-btn')
+loggoutBtn.addEventListener('click', e => {
+  logoutUser()
+})
+function logoutUser(){
+  sessionStorage.setItem("healme_auth", "null") 
+  document.querySelectorAll('.user-loggedin').forEach(elem => elem.style.display = 'none')
+  document.querySelectorAll('.user-loggedout').forEach(elem => elem.style.display = 'initial')
 }
 
 function loginUser(email, password){
@@ -337,9 +361,21 @@ function loginUser(email, password){
   })
     .then((response) => response.json())
     .then((obj) => {
-      console.log(obj);
+      if(obj.error){
+        //display the error to the user 
+      }else {
+      // console.log(obj, 'logged user info');
+      sessionStorage.setItem("healme_auth", JSON.stringify(obj)) 
+      navbarUpdateLoggedInStatus(obj.user.name)
+      }
     });
   
+}
+
+function navbarUpdateLoggedInStatus(user_name){
+  document.querySelectorAll('.user-loggedin').forEach(elem => elem.style.display = 'initial')
+  document.querySelectorAll('.user-loggedout').forEach(elem => elem.style.display = 'none')
+  document.querySelector('#user-name-btn').innerText = `Hello ${user_name}`
 }
 
 const healthConditionTag = document.querySelector("#health-condition-filter");

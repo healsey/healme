@@ -45,13 +45,23 @@
             </button>
         
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                <ul class="navbar-nav mr-auto" id="navbar-options">
+                    <li class="nav-item active user-loggedout">
                         <a class="nav-link" href="#" id="register-btn">Register <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item active user-loggedout">
                         <a class="nav-link" id="login-btn" href="#">Login</a>
                     </li>
+                    <li class="nav-item active user-loggedin" style="display: none;">
+                        <a class="nav-link" id="user-name-btn" href="#">Hello Senada</a>
+                    </li>
+                    <li class="nav-item active user-loggedin" style="display: none;">
+                        <a class="nav-link" id="saved-recipes-btn" href="#">Saved Recipes</a>
+                    </li>
+                    <li class="nav-item active user-loggedin" style="display: none;">
+                        <a class="nav-link" id="logout-btn" href="#">Logout</a>
+                    </li>
+                 
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -157,6 +167,17 @@
             </div>
         </div>
     </div>
+    <!-- Loading -->
+    <div class="loader">
+        <div class="duo duo1">
+          <div class="dot dot-a"></div>
+          <div class="dot dot-b"></div>
+        </div>
+        <div class="duo duo2">
+          <div class="dot dot-a"></div>
+          <div class="dot dot-b"></div>
+        </div>
+      </div>
 </body>
 
 </html>
