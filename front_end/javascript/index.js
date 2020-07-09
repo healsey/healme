@@ -61,7 +61,7 @@ function urlQueryStringGenerator() {
 
 //home page
 function recipesFetch() {
-  recipesContainer.innerHTML = ""
+  // recipesContainer.innerHTML = ""
   // loader.style.display = "initial";
   // fetch("http://localhost:3000/recipes")
   //   .then((resp) => resp.json())
@@ -181,29 +181,6 @@ function favBtnListener(recipe, favoriteBtn, divTag, favSpan, originalSpan=null)
       }
     }
 
-    // if(current_user !== null && current_user !== 'null'){
-    //   if (favSpan.className === "white") {
-    //     console.log(favSpan)
-    //     favSpan.innerText = "❤️";
-    //     favSpan.className = "red";
-    //     savedRecipeDivTag.append(divTag);
-    //     saveRecipe(recipe);
-    //   } else {
-    //     favSpan.innerText = "🤍";
-    //     favSpan.className = "white";
-    //     divTag.remove();
-    //     if(originalSpan){
-    //       originalSpan.innerText = "🤍"
-    //       originalSpan.className = "red";
-    //     }
-    //     deleteRecipe(recipe.uri)
-    //   }
-    // } else {
-    //   $("#modal-title")[0].innerText = "Login";
-    //   $(".users-name")[0].style.display = "none";
-    //   $(".users-name")[1].style.display = "none";
-    //   $("#registration-modal").modal();
-    // }
   });
 }
 
@@ -521,6 +498,7 @@ $("#logo").click((e) => {
 });
 
 function retrieveSavedRecipes() {
+  savedRecipeDivTag.innerHTML = ''
   fetch("http://localhost:3000/recipes/saved_recipes", {
     method: "POST",
     headers: {
@@ -547,6 +525,17 @@ healthConditionTag.addEventListener("click", (e) => filterToggler(e));
 healthConditionTag.click(); //open health conditons selection when page initially loads
 allergensFilterTag.addEventListener("click", (e) => filterToggler(e));
 allFilterTag.addEventListener("click", (e) => filterToggler(e));
+
+
+
+
+// **************** Handling Search Functionality *********************
+const searchForm = document.querySelector('#search-form')
+searchForm.addEventListener('submit', e => {
+  e.preventDefault()
+  console.log(e.target.search.value)
+})
+
 
 
 
