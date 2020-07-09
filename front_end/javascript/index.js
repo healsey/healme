@@ -17,12 +17,13 @@ welcomeButton.addEventListener("click", () => {
 });
 
 //keeps user logged in after page refresh
-const current_user = sessionStorage.getItem("healme_auth");
-const parsed_user = JSON.parse(current_user);
+let current_user = JSON.parse(sessionStorage.getItem("healme_auth"));
+//et parsed_user = JSON.parse(current_user);
 
-if (current_user !== null) {
-  const parsed_user = JSON.parse(current_user);
-  navbarUpdateLoggedInStatus(parsed_user.user.name);
+//console.log(current_user !== null && current_user !== 'null')
+if (current_user !== null && current_user !== 'null') {
+  //const parsed_user = JSON.parse(current_user);
+  navbarUpdateLoggedInStatus(current_user.user.name);
 }
 
 function urlQueryStringGenerator() {
@@ -60,53 +61,56 @@ function urlQueryStringGenerator() {
 
 //home page
 function recipesFetch() {
-  loader.style.display = "initial";
-  fetch("http://localhost:3000/recipes")
-    .then((resp) => resp.json())
-    .then((data) => {
-      data.hits.forEach((recipe) => {
-        displayRecipe(recipe.recipe, false);
-        loader.style.display = "none";
-      });
-    });
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
+  recipesContainer.innerHTML = ""
+  // loader.style.display = "initial";
+  // fetch("http://localhost:3000/recipes")
+  //   .then((resp) => resp.json())
+  //   .then((data) => {
+  //     data.hits.forEach((recipe) => {
+  //       displayRecipe(recipe.recipe, false);
+  //       loader.style.display = "none";
+  //     });
+  //   });
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
 }
 
 function filtersFetch() {
-  loader.style.display = "initial";
-  console.log(JSON.parse(sessionStorage.getItem("healme_auth")));
-  let customUrl = urlQueryStringGenerator();
+  // loader.style.display = "initial";
+  // console.log(JSON.parse(sessionStorage.getItem("healme_auth")));
+  // let customUrl = urlQueryStringGenerator();
 
-  if (customUrl === "null") {
-    recipesFetch();
-  } else {
-    fetch(`http://localhost:3000/recipes/${customUrl}`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        recipesContainer.innerHTML = "";
-        data.hits.forEach((recipe) => {
-          displayRecipe(recipe.recipe, false);
-          loader.style.display = "none";
-        });
-      });
-  }
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
-  // displayRecipe(recipe, false);
+  // if (customUrl === "null") {
+  //   recipesFetch();
+  // } else {
+  //   fetch(`http://localhost:3000/recipes/${customUrl}`)
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       recipesContainer.innerHTML = "";
+  //       data.hits.forEach((recipe) => {
+  //         displayRecipe(recipe.recipe, false);
+  //         loader.style.display = "none";
+  //       });
+  //     });
+  // }
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
+  displayRecipe(recipe, false);
 }
 
 function displayRecipe(recipe, isSaved) {
   let heart = "🤍";
+  let spanClass = "white";
   if (isSaved) {
     heart = "❤️";
+    spanClass = "red";
   }
   const divTag = document.createElement("div");
   divTag.classList.add("col", "mb-4");
@@ -116,7 +120,7 @@ function displayRecipe(recipe, isSaved) {
         <div class="image">
             <img src="${recipe.image}" class="card-img-top" alt="...">
              <button class="favorite">
-            <span class="white">${heart}</span>
+            <span class="${spanClass}">${heart}</span>
           </button>
           </div>
             <div class="card-body">
@@ -127,38 +131,79 @@ function displayRecipe(recipe, isSaved) {
         </div>
     </div>
     `;
-  const divTagCopy = divTag.cloneNode(true);
-  const favSpan = divTag.querySelector("span");
-  const favoriteBtn = divTag.querySelector(".favorite");
-  const favoriteBtnCopy = divTagCopy.querySelector(".favorite");
-  const favSpanCopy = divTagCopy.querySelector("span");
-  if (isSaved === false) {
-    //const cardContainer = divTag.querySelector('.card-container')
+
+    const divTagCopy = divTag.cloneNode(true);
+    divTagCopy.querySelector('span').innerText = "❤️"
+    divTagCopy.querySelector('span').className = "red"
+   
+    const favoriteBtnCopy = divTagCopy.querySelector(".favorite");
+    const favSpanCopy = divTagCopy.querySelector("span");
+    const favSpan = divTag.querySelector("span");
+    const favoriteBtn = divTag.querySelector(".favorite");
+
+  if (isSaved == false) {
     const detailsBtn = divTag.querySelector(".btn");
     detailsBtn.addEventListener("click", () => displayRecipeDetail(recipe));
+    favBtnListener(recipe,favoriteBtn, divTagCopy, favSpan);
     recipesContainer.append(divTag);
-    favBtnListener(favoriteBtn, divTag, favSpan);
   } else {
-    const detailsBtnCopy = divTagCopy.querySelector(".btn");
-    detailsBtnCopy.addEventListener("click", () => displayRecipeDetail(recipe));
     savedRecipeDivTag.append(divTagCopy);
-    favBtnListener(favoriteBtnCopy, divTagCopy, favSpanCopy);
   }
+  const detailsBtnCopy = divTagCopy.querySelector(".btn");
+  detailsBtnCopy.addEventListener("click", () => displayRecipeDetail(recipe));
+  favBtnListener(recipe, favoriteBtnCopy, divTagCopy, favSpanCopy, favSpan)
 }
 
-function favBtnListener(favoriteBtn, divTagCopy, favSpan) {
+
+function favBtnListener(recipe, favoriteBtn, divTag, favSpan, originalSpan=null) {
   favoriteBtn.addEventListener("click", (e) => {
-    if (favSpan.className === "white") {
-      // favoriteBtn.classList.add("disabled");
-      favSpan.innerText = "❤️";
-      favSpan.className = "red";
-      savedRecipeDivTag.append(divTagCopy);
-      saveRecipe(recipe);
-    } else {
-      favSpan.innerText = "🤍";
-      favSpan.className = "white";
-      divTagCopy.remove();
+    if(current_user == null || current_user == 'null'){
+      $("#modal-title")[0].innerText = "Login";
+      $(".users-name")[0].style.display = "none";
+      $(".users-name")[1].style.display = "none";
+      $("#registration-modal").modal();
+    }else {
+      if (favSpan.className === "white") {
+        console.log(favSpan)
+        favSpan.innerText = "❤️";
+        favSpan.className = "red";
+        savedRecipeDivTag.append(divTag);
+        saveRecipe(recipe);
+      } else {
+        favSpan.innerText = "🤍";
+        favSpan.className = "white";
+        divTag.remove();
+        if(originalSpan){
+          originalSpan.innerText = "🤍"
+          originalSpan.className = "red";
+        }
+        deleteRecipe(recipe.uri)
+      }
     }
+
+    // if(current_user !== null && current_user !== 'null'){
+    //   if (favSpan.className === "white") {
+    //     console.log(favSpan)
+    //     favSpan.innerText = "❤️";
+    //     favSpan.className = "red";
+    //     savedRecipeDivTag.append(divTag);
+    //     saveRecipe(recipe);
+    //   } else {
+    //     favSpan.innerText = "🤍";
+    //     favSpan.className = "white";
+    //     divTag.remove();
+    //     if(originalSpan){
+    //       originalSpan.innerText = "🤍"
+    //       originalSpan.className = "red";
+    //     }
+    //     deleteRecipe(recipe.uri)
+    //   }
+    // } else {
+    //   $("#modal-title")[0].innerText = "Login";
+    //   $(".users-name")[0].style.display = "none";
+    //   $(".users-name")[1].style.display = "none";
+    //   $("#registration-modal").modal();
+    // }
   });
 }
 
@@ -172,12 +217,29 @@ function saveRecipe(recipe) {
     body: JSON.stringify({
       metadata: recipe,
       uri: recipe.uri,
-      user_id: parsed_user.user.id,
+      user_id: current_user.user.id,
     }),
   })
     .then((resp) => resp.json())
     .then((obj) => {
-      // console.log("hello", obj);
+       console.log("hello", obj);
+    });
+}
+
+function deleteRecipe(recipe_uri) {
+  fetch('http://localhost:3000/recipes', {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      uri: recipe_uri,
+      user_id: current_user.user.id,
+    })
+  }).then(resp => resp.json())
+    .then(obj => {
+      console.log("deleted", obj);
     });
 }
 
@@ -404,6 +466,9 @@ function logoutUser() {
   document
     .querySelectorAll(".user-loggedout")
     .forEach((elem) => (elem.style.display = "initial"));
+
+    current_user = null;
+    recipesFetch()
 }
 
 function loginUser(email, password) {
@@ -426,6 +491,8 @@ function loginUser(email, password) {
         // console.log(obj, 'logged user info');
         sessionStorage.setItem("healme_auth", JSON.stringify(obj));
         navbarUpdateLoggedInStatus(obj.user.name);
+        current_user = obj;
+        recipesFetch()
       }
     });
 }
@@ -461,7 +528,7 @@ function retrieveSavedRecipes() {
       Accept: "application/json",
     },
     body: JSON.stringify({
-      user_id: parsed_user.user.id,
+      user_id: current_user.user.id,
     }),
   })
     .then((resp) => resp.json())
@@ -480,6 +547,8 @@ healthConditionTag.addEventListener("click", (e) => filterToggler(e));
 healthConditionTag.click(); //open health conditons selection when page initially loads
 allergensFilterTag.addEventListener("click", (e) => filterToggler(e));
 allFilterTag.addEventListener("click", (e) => filterToggler(e));
+
+
 
 const recipe = {
   uri:

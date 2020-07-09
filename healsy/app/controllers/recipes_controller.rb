@@ -27,7 +27,7 @@ class RecipesController < ApplicationController
         user = User.find(params["user_id"])
         metadata = params["metadata"]
         uri = params["uri"]
-
+        # byebug
         recipe = Recipe.create(metadata: metadata, uri: uri)
         RecipeUser.create(user_id: user.id, recipe_id: recipe.id)
 
@@ -37,8 +37,18 @@ class RecipesController < ApplicationController
     def saved_recipes
         user = User.find(params["user_id"])
         recipes = user.recipes
-
+        
         render json: recipes
     end
+
+
+    def destroy  
+        uri = params["uri"]
+        user = User.find(params["user_id"])
+        recipe = Recipe.find_by(uri: uri)
+        recipe.destroy
+
+        render json: {message: "Successfully deleted!"}
+    end 
 
 end
