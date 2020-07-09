@@ -23,4 +23,22 @@ class RecipesController < ApplicationController
          render json: data
     end
 
+    def create
+        user = User.find(params["user_id"])
+        metadata = params["metadata"]
+        uri = params["uri"]
+
+        recipe = Recipe.create(metadata: metadata, uri: uri)
+        RecipeUser.create(user_id: user.id, recipe_id: recipe.id)
+
+        render json: recipe
+    end
+
+    def saved_recipes
+        user = User.find(params["user_id"])
+        recipes = user.recipes
+
+        render json: recipes
+    end
+
 end

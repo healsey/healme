@@ -179,6 +179,34 @@
   margin: 10px;
 }
 
+.card .favorite {
+  position: absolute;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: white;
+  color: var(--theme-primary);
+  margin: 0.5rem;
+  width: 40px;
+  height: 40px;
+  font-size: 1.25rem;
+  padding: 0;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  border-style: none;
+}
+
+.card:hover .favorite {
+  opacity: 0.7;
+}
+
+.card .favorite:hover {
+  opacity: 1;
+}
+
 /* *************************   LOADING *****************************/
 .loader {
   position: absolute;
@@ -193,12 +221,12 @@
 .duo {
   height: 20px;
   width: 50px;
-  background: hsla(0, 0%, 0%, 0.0);
+  background: hsla(0, 0%, 0%, 0);
   position: absolute;
-  
 }
 
-.duo, .dot {
+.duo,
+.dot {
   animation-duration: 0.8s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
@@ -209,9 +237,8 @@
 }
 
 .duo2 {
-  left: 30px
+  left: 30px;
 }
-
 
 .dot {
   width: 20px;
@@ -222,25 +249,38 @@
 }
 
 .dot-a {
-  left: 0px;  
+  left: 0px;
 }
 
 .dot-b {
   right: 0px;
 }
 
-
 @keyframes spin {
-    0% { transform: rotate(0deg) }
-   50% { transform: rotate(180deg) }
-  100% { transform: rotate(180deg) }
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
 }
 
 @keyframes onOff {
-    0% { opacity: 0; }
-   49% { opacity: 0; }
-   50% { opacity: 1; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  49% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .duo1 {

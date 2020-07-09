@@ -1,7 +1,8 @@
 class CreateRecipes < ActiveRecord::Migration[6.0]
   def change
     create_table :recipes do |t|
-      t.integer :recipe_api_id
+      t.string :metadata
+      t.string :uri
 
       t.timestamps
     end

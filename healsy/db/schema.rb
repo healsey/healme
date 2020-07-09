@@ -21,26 +21,6 @@ ActiveRecord::Schema.define(version: 2020_07_07_020419) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "health_condition_ingredients", force: :cascade do |t|
-    t.integer "health_condition_id"
-    t.integer "ingredient_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "health_conditions", force: :cascade do |t|
-    t.string "name"
-    t.string "image_url"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "ingredients", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "recipe_users", force: :cascade do |t|
     t.integer "recipe_id"
     t.integer "user_id"
@@ -49,7 +29,8 @@ ActiveRecord::Schema.define(version: 2020_07_07_020419) do
   end
 
   create_table "recipes", force: :cascade do |t|
-    t.integer "recipe_api_id"
+    t.string "metadata"
+    t.string "uri"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

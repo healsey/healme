@@ -20,8 +20,8 @@ end
 #     HealthCondition.create(name: condition, image_url: images.sample)
 # end
 
-senada = User.create(name: "Senadadad", email: "Senada@gmail.com")
-bashir = User.create(name: "Beshrr", email: "Bashir@gmail.com")
+senada = User.create(name: "Senadadad", email: "Senada@gmail.com", password: "1234")
+bashir = User.create(name: "Beshrr", email: "Bashir@gmail.com", password: "1234")
 
 UserAllergy.create(user_id: senada.id, allergy_id: Allergy.first.id)
 UserAllergy.create(user_id: senada.id, allergy_id: Allergy.last.id)

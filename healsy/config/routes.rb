@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   
   post "/users/login" => 'users#login'
+  post "/recipes/saved_recipes" => 'recipes#saved_recipes'
   get "/recipes/:filtered_recipes" => 'recipes#filtered_recipes'
 
   resources :user_allergies
