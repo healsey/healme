@@ -40,6 +40,9 @@ module Healsy
       end
     end
 
+    #Senada added this for user authentication 
+    config.autoload_paths << Rails.root.join('lib')
+
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.

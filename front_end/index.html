@@ -12,6 +12,8 @@
     <title>HealMe</title>
 </head>
 <body>
+
+
     <!-- Welcome Page -->
     <div id="welcome-page">
         <video loop muted autoplay>
@@ -35,9 +37,150 @@
             </div>
         </div>
         
-        <div id="recipes-container" class="card-deck row row-cols-1 row-cols-md-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#" id="logo">HM</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto" id="navbar-options">
+                    <li class="nav-item active user-loggedout">
+                        <a class="nav-link" href="#" id="register-btn">Register <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active user-loggedout">
+                        <a class="nav-link" id="login-btn" href="#">Login</a>
+                    </li>
+                    <li class="nav-item active user-loggedin" style="display: none;">
+                        <a class="nav-link" id="user-name-btn" href="#">Hello Senada</a>
+                    </li>
+                    <li class="nav-item active user-loggedin" style="display: none;">
+                        <a class="nav-link" id="saved-recipes-btn" href="#">Saved Recipes</a>
+                    </li>
+                    <li class="nav-item active user-loggedin" style="display: none;">
+                        <a class="nav-link" id="logout-btn" href="#">Logout</a>
+                    </li>
+                 
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+
+        <div class="home-page-middle">
+            <div id="filters">
+                <h4>Filter By</h4>
+                <p id="health-condition-filter" data-toggle="collapse" aria-controls="collapseExample"  data-target="#health-condition-div">Health Conditions <span>+</span></span></p>
+                <div class="collapse" id="health-condition-div">
+                    <!-- Health conditions selections  -->
+                </div>
+                <hr>
+                <p id="allergens-filter" data-toggle="collapse" aria-controls="collapseExample"  data-target="#allergens-div">Allergies <span>+</span></p>
+                <div class="collapse" id="allergens-div">
+                    <!-- Allergens selections  -->
+                </div>
+                <hr>
+                <p id="all-filter" data-toggle="collapse" aria-controls="collapseExample"  data-target="#all-filter-div">Additional Options <span>+</span></p>
+                <div class="collapse" id="all-filter-div">
+                    <!-- API selections  -->
+                </div>
+            </div>
+            <div id="recipes-container" class="card-deck row row-cols-1 row-cols-md-3">
                 <!-- Recipes will be displayed here -->
+            </div>
+            <div id="saved-recipes-container" class="card-deck row row-cols-1 row-cols-md-3" style="display: none;">
+                <!-- Saved Recipes will be displayed here -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal to display details for a single recipe -->
+
+    <div class="modal fade" id="recipeModal" tabindex="-1" role="dialog" aria-labelledby="recipeModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="recipeModalTitle">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="image-container">
+                    <img src="" class="modal-image" >
+                </div>
+                <hr>
+                <div>
+                    <h5>Ingredients</h5>
+                    <ul class="ingredients-list">
+                    </ul>
+                    <hr>
+                    <h5>Diet Labels</h5>
+                    <div class="diet-labels"></div>
+                    <hr>
+                    <h5>Health Labels</h5>
+                    <div class="health-labels"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <p class="pull-left">Dish Type: <span class="dishType">Main</span></p>
+              <p> Calories: <span class="calories">500</span></p>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
         </div>
     </div>
+
+    <!-- Modal to display registration form -->
+    <div class="modal" tabindex="-1" role="dialog" id="registration-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Register</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="auth-form">
+                        <div class="form-group">
+                            <label for="name" class="users-name">Name</label>
+                            <input name="name" type="name" class="form-control users-name" id="name">
+
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1" name="password">Password</label>
+                            <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+    <!-- Loading -->
+    <div class="loader">
+        <div class="duo duo1">
+          <div class="dot dot-a"></div>
+          <div class="dot dot-b"></div>
+        </div>
+        <div class="duo duo2">
+          <div class="dot dot-a"></div>
+          <div class="dot dot-b"></div>
+        </div>
+      </div>
 </body>
+
 </html>
