@@ -165,7 +165,7 @@ function favBtnListener(recipe, favoriteBtn, divTag, favSpan, originalSpan=null)
       $("#registration-modal").modal();
     }else {
       if (favSpan.className === "white") {
-        console.log(favSpan)
+        //console.log(favSpan)
         favSpan.innerText = "❤️";
         favSpan.className = "red";
         savedRecipeDivTag.append(divTag);
@@ -174,9 +174,10 @@ function favBtnListener(recipe, favoriteBtn, divTag, favSpan, originalSpan=null)
         favSpan.innerText = "🤍";
         favSpan.className = "white";
         divTag.remove();
-        if(originalSpan){
+        if(originalSpan !== null){
+          console.log("called originalspan", originalSpan)
           originalSpan.innerText = "🤍"
-          originalSpan.className = "red";
+          originalSpan.className = "white";
         }
         deleteRecipe(recipe.uri)
       }
@@ -200,7 +201,8 @@ function saveRecipe(recipe) {
   })
     .then((resp) => resp.json())
     .then((obj) => {
-       console.log("hello", obj);
+       retrieveSavedRecipes()
+       $('#create-recipe-modal').modal('hide')
     });
 }
 
@@ -429,6 +431,9 @@ function registerUser(name, email, password) {
       } else {
         sessionStorage.setItem("healme_auth", JSON.stringify(obj));
         navbarUpdateLoggedInStatus(obj.user.name);
+        //added this on morning of demo 
+        current_user = obj;
+        recipesFetch()
       }
     });
 }
