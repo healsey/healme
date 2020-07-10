@@ -17,12 +17,13 @@ welcomeButton.addEventListener("click", () => {
 });
 
 //keeps user logged in after page refresh
-const current_user = sessionStorage.getItem("healme_auth");
-const parsed_user = JSON.parse(current_user);
+let current_user = JSON.parse(sessionStorage.getItem("healme_auth"));
+//et parsed_user = JSON.parse(current_user);
 
-if (current_user !== null) {
-  const parsed_user = JSON.parse(current_user);
-  navbarUpdateLoggedInStatus(parsed_user.user.name);
+//console.log(current_user !== null && current_user !== 'null')
+if (current_user !== null && current_user !== 'null') {
+  //const parsed_user = JSON.parse(current_user);
+  navbarUpdateLoggedInStatus(current_user.user.name);
 }
 
 function urlQueryStringGenerator() {
@@ -60,6 +61,7 @@ function urlQueryStringGenerator() {
 
 //home page
 function recipesFetch() {
+  recipesContainer.innerHTML = ""
   loader.style.display = "initial";
   fetch("http://localhost:3000/recipes")
     .then((resp) => resp.json())
@@ -77,15 +79,16 @@ function recipesFetch() {
   // displayRecipe(recipe, false);
 }
 
-function filtersFetch() {
+function filtersFetch(search_term='null') {
+  recipesContainer.innerHTML = ''; //recently added 
   loader.style.display = "initial";
-  console.log(JSON.parse(sessionStorage.getItem("healme_auth")));
+  
   let customUrl = urlQueryStringGenerator();
 
-  if (customUrl === "null") {
+  if (customUrl === "null" && search_term == 'null') {
     recipesFetch();
-  } else {
-    fetch(`http://localhost:3000/recipes/${customUrl}`)
+  } else  {
+    fetch(`http://localhost:3000/recipes/${customUrl}/${search_term}`)
       .then((resp) => resp.json())
       .then((data) => {
         recipesContainer.innerHTML = "";
@@ -105,8 +108,10 @@ function filtersFetch() {
 
 function displayRecipe(recipe, isSaved) {
   let heart = "🤍";
+  let spanClass = "white";
   if (isSaved) {
     heart = "❤️";
+    spanClass = "red";
   }
   const divTag = document.createElement("div");
   divTag.classList.add("col", "mb-4");
@@ -116,7 +121,7 @@ function displayRecipe(recipe, isSaved) {
         <div class="image">
             <img src="${recipe.image}" class="card-img-top" alt="...">
              <button class="favorite">
-            <span class="white">${heart}</span>
+            <span class="${spanClass}">${heart}</span>
           </button>
           </div>
             <div class="card-body">
@@ -127,38 +132,57 @@ function displayRecipe(recipe, isSaved) {
         </div>
     </div>
     `;
-  const divTagCopy = divTag.cloneNode(true);
-  const favSpan = divTag.querySelector("span");
-  const favoriteBtn = divTag.querySelector(".favorite");
-  const favoriteBtnCopy = divTagCopy.querySelector(".favorite");
-  const favSpanCopy = divTagCopy.querySelector("span");
-  if (isSaved === false) {
-    //const cardContainer = divTag.querySelector('.card-container')
+
+    const divTagCopy = divTag.cloneNode(true);
+    divTagCopy.querySelector('span').innerText = "❤️"
+    divTagCopy.querySelector('span').className = "red"
+   
+    const favoriteBtnCopy = divTagCopy.querySelector(".favorite");
+    const favSpanCopy = divTagCopy.querySelector("span");
+    const favSpan = divTag.querySelector("span");
+    const favoriteBtn = divTag.querySelector(".favorite");
+
+  if (isSaved == false) {
     const detailsBtn = divTag.querySelector(".btn");
     detailsBtn.addEventListener("click", () => displayRecipeDetail(recipe));
+    favBtnListener(recipe,favoriteBtn, divTagCopy, favSpan);
     recipesContainer.append(divTag);
-    favBtnListener(favoriteBtn, divTag, favSpan);
   } else {
-    const detailsBtnCopy = divTagCopy.querySelector(".btn");
-    detailsBtnCopy.addEventListener("click", () => displayRecipeDetail(recipe));
     savedRecipeDivTag.append(divTagCopy);
-    favBtnListener(favoriteBtnCopy, divTagCopy, favSpanCopy);
   }
+  const detailsBtnCopy = divTagCopy.querySelector(".btn");
+  detailsBtnCopy.addEventListener("click", () => displayRecipeDetail(recipe));
+  favBtnListener(recipe, favoriteBtnCopy, divTagCopy, favSpanCopy, favSpan)
 }
 
-function favBtnListener(favoriteBtn, divTagCopy, favSpan) {
+
+function favBtnListener(recipe, favoriteBtn, divTag, favSpan, originalSpan=null) {
   favoriteBtn.addEventListener("click", (e) => {
-    if (favSpan.className === "white") {
-      // favoriteBtn.classList.add("disabled");
-      favSpan.innerText = "❤️";
-      favSpan.className = "red";
-      savedRecipeDivTag.append(divTagCopy);
-      saveRecipe(recipe);
-    } else {
-      favSpan.innerText = "🤍";
-      favSpan.className = "white";
-      divTagCopy.remove();
+    if(current_user == null || current_user == 'null'){
+      $("#modal-title")[0].innerText = "Login";
+      $(".users-name")[0].style.display = "none";
+      $(".users-name")[1].style.display = "none";
+      $("#registration-modal").modal();
+    }else {
+      if (favSpan.className === "white") {
+        //console.log(favSpan)
+        favSpan.innerText = "❤️";
+        favSpan.className = "red";
+        savedRecipeDivTag.append(divTag);
+        saveRecipe(recipe);
+      } else {
+        favSpan.innerText = "🤍";
+        favSpan.className = "white";
+        divTag.remove();
+        if(originalSpan !== null){
+          console.log("called originalspan", originalSpan)
+          originalSpan.innerText = "🤍"
+          originalSpan.className = "white";
+        }
+        deleteRecipe(recipe.uri)
+      }
     }
+
   });
 }
 
@@ -172,12 +196,30 @@ function saveRecipe(recipe) {
     body: JSON.stringify({
       metadata: recipe,
       uri: recipe.uri,
-      user_id: parsed_user.user.id,
+      user_id: current_user.user.id,
     }),
   })
     .then((resp) => resp.json())
     .then((obj) => {
-      // console.log("hello", obj);
+       retrieveSavedRecipes()
+       $('#create-recipe-modal').modal('hide')
+    });
+}
+
+function deleteRecipe(recipe_uri) {
+  fetch('http://localhost:3000/recipes', {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      uri: recipe_uri,
+      user_id: current_user.user.id,
+    })
+  }).then(resp => resp.json())
+    .then(obj => {
+      console.log("deleted", obj);
     });
 }
 
@@ -187,7 +229,7 @@ const healthConditionDiv = document.querySelector("#health-condition-div");
 const healthConditions = [
   "Diabetes",
   "Hypertension",
-  "High Cholestrol",
+  "High Cholesterol",
   "Alzheimers",
 ];
 healthConditions.forEach((condition) => {
@@ -214,7 +256,7 @@ allergies.forEach((allergy) => {
 //all api filteration
 const apiOptions = [
   "Alcohol-free",
-  "Immune-Supportive",
+  "Immuno-Supportive",
   "Celery-free",
   "Crustcean-free",
   "Fish",
@@ -253,7 +295,7 @@ function createCheckbox(name, mainTag) {
   const divTag = document.createElement("div");
   divTag.classList.add("form-check");
   divTag.innerHTML = `
-        <input class="form-check-input" type="checkbox" value="" id="${id}">
+        <input class="form-check-input" name="checkbox" type="checkbox" value="" id="${id}">
         <label class="form-check-label" for="${id}">
         ${name}
         </label>
@@ -389,6 +431,9 @@ function registerUser(name, email, password) {
       } else {
         sessionStorage.setItem("healme_auth", JSON.stringify(obj));
         navbarUpdateLoggedInStatus(obj.user.name);
+        //added this on morning of demo 
+        current_user = obj;
+        recipesFetch()
       }
     });
 }
@@ -404,6 +449,9 @@ function logoutUser() {
   document
     .querySelectorAll(".user-loggedout")
     .forEach((elem) => (elem.style.display = "initial"));
+
+    current_user = null;
+    recipesFetch()
 }
 
 function loginUser(email, password) {
@@ -426,6 +474,8 @@ function loginUser(email, password) {
         // console.log(obj, 'logged user info');
         sessionStorage.setItem("healme_auth", JSON.stringify(obj));
         navbarUpdateLoggedInStatus(obj.user.name);
+        current_user = obj;
+        recipesFetch()
       }
     });
 }
@@ -454,6 +504,7 @@ $("#logo").click((e) => {
 });
 
 function retrieveSavedRecipes() {
+  savedRecipeDivTag.innerHTML = ''
   fetch("http://localhost:3000/recipes/saved_recipes", {
     method: "POST",
     headers: {
@@ -461,7 +512,7 @@ function retrieveSavedRecipes() {
       Accept: "application/json",
     },
     body: JSON.stringify({
-      user_id: parsed_user.user.id,
+      user_id: current_user.user.id,
     }),
   })
     .then((resp) => resp.json())
@@ -480,6 +531,111 @@ healthConditionTag.addEventListener("click", (e) => filterToggler(e));
 healthConditionTag.click(); //open health conditons selection when page initially loads
 allergensFilterTag.addEventListener("click", (e) => filterToggler(e));
 allFilterTag.addEventListener("click", (e) => filterToggler(e));
+
+
+
+
+// **************** Handling Search Functionality *********************
+const searchForm = document.querySelector('#search-form')
+searchForm.addEventListener('submit', e => {
+  e.preventDefault()
+  filtersFetch(e.target.search.value)
+})
+
+
+// ******************** Create Recipe *******************************
+const addIngredientBtn = document.querySelector('#add-ingredient')
+const ingredientsCreateRecipeDiv = document.querySelector('#ingredients-create-recipe')
+addIngredientBtn.addEventListener('click', e => {
+  ingredientsCreateRecipeDiv.innerHTML += `<input name="ingredients" type="name" class="form-control recipe-name" id="recipe-name">`
+})
+const createRecipeBtn = document.querySelector('#create-recipe-btn')
+createRecipeBtn.addEventListener('click', e => {
+  const healthLabelRecipeCreation = document.querySelector('#health-labels-create-recipe') 
+  const dietLabelRecipeCreation = document.querySelector('#diet-labels-create-recipe')
+
+  healthLabelRecipeCreation.innerHTML = ''
+  dietLabelRecipeCreation.innerHTML = ''
+  healthLabelsOptions.forEach(option => {
+    newRecipeCheckbox(option, healthLabelRecipeCreation)
+  })
+
+dietLabels.forEach(option => {
+  newRecipeCheckbox(option, dietLabelRecipeCreation)
+})
+  
+  $('#create-recipe-modal').modal()
+})
+
+
+
+const createRecipeForm = document.querySelector('#create-recipe-form')
+createRecipeForm.addEventListener('submit', e => {
+  e.preventDefault()
+  const recipeName = e.target.recipeName.value
+  const imageLink = e.target.image.value
+  const healthLabelsArray = []
+  const dietLabelsArray = []
+  const ingredientArray = []
+
+  // console.log(e.target.querySelector('#health-labels-create-recipe'))
+  e.target.querySelector('#health-labels-create-recipe').childNodes.forEach(inn => {
+    if(inn.querySelector('input').checked){
+      healthLabelsArray.push(inn.querySelector('input').id)
+    }
+  })
+
+  e.target.querySelector('#diet-labels-create-recipe').childNodes.forEach(inn => {
+    if(inn.querySelector('input').checked){
+      dietLabelsArray.push(inn.querySelector('input').id)
+    }
+  })
+  
+  e.target.querySelector('#ingredients-create-recipe').childNodes.forEach(inn => {
+    console.log(inn.value)
+    ingredientArray.push(inn.value)
+  })
+  
+  const finalRecipe = {
+    uri: imageLink,
+    label: recipeName,
+    image: imageLink,
+    dietLabels: dietLabelsArray,
+    healthLabels: healthLabelsArray,
+    ingredientLines: ingredientArray,
+    calories: 175
+  }
+
+  saveRecipe(finalRecipe)
+})
+
+
+
+function newRecipeCheckbox(name, mainTag) {
+  const id = name.toLowerCase().replace(" ", "-");
+  const divTag = document.createElement("div");
+  divTag.classList.add("form-check");
+  divTag.innerHTML = `
+        <input class="form-check-input" name="checkbox" type="checkbox" value="" id="${id}">
+        <label class="form-check-label" for="${id}">
+        ${name}
+        </label>
+    `;
+
+  mainTag.append(divTag);
+}
+
+
+const healthLabelsOptions = [
+  "Sugar-Conscious",
+  "Vegan",
+  "Vegetarian",
+  "Peanut-Free",
+  "Tree-Nut-Free",
+  "Alcohol-Free",
+]
+
+const dietLabels = ["High-Protein", "Low-Fat", "Low-Sodium", "Low-Carb"]
 
 const recipe = {
   uri:
@@ -510,3 +666,7 @@ const recipe = {
   dishtype: "dinner",
   calories: 500,
 };
+
+
+
+

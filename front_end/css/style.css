@@ -29,6 +29,7 @@
   color: white;
   font-size: 40px;
   text-align: center;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
 }
 
 .welcome-button:hover {
@@ -39,11 +40,15 @@
 
 .company-name {
   color: white;
-  font-size: 60px;
+  font-size: 150px;
   text-align: center;
+  /* font-family: 'Dosis', sans-serif; */
+  /* font-family: 'Poppins', sans-serif; */
+  font-family: 'Yanone Kaffeesatz', sans-serif;
 }
 
 /* ###################################################### */
+
 
 /* Home Page */
 .home-page {
@@ -62,6 +67,21 @@
 .home-page-title {
   color: white;
   text-align: center;
+  /* font-family: 'Dosis', sans-serif; */
+  /* font-family: 'Poppins', sans-serif; */
+  /* font-family: 'Yanone Kaffeesatz', sans-serif; */
+}
+
+.home-page-title h1{
+  font-size: 100px;
+  font-family: 'Yanone Kaffeesatz', sans-serif;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.home-page-title h2 {
+   font-family: 'Poppins', sans-serif;
+   font-size: 27px; 
 }
 
 .heart-vegtable img {
@@ -100,7 +120,7 @@
 }
 
 .heart-vegtable {
-  margin-top: 4%;
+  margin-top: 3%;
   text-align: center;
   animation-name: pulse_animation;
   animation-duration: 2000ms;
@@ -123,6 +143,7 @@
 #filters {
   margin-left: 20px;
   width: 20%;
+  border-right: 1px solid black;
 }
 
 #recipes-container {
@@ -130,6 +151,14 @@
   /* margin: 0 auto; */
   text-align: center;
   padding: 4px;
+  margin-left: 10px;
+}
+
+#saved-recipes-container{
+  width: 70%;
+  text-align: center;
+  padding: 4px;
+  margin-left: 10px;
 }
 
 #all-filter-div {
@@ -155,8 +184,12 @@
 .modal-body img {
   border-radius: 2rem;
   text-align: center;
+  max-width: 100%;
+  max-height: 100%;
   /* width: 100%; */
 }
+
+
 
 .health-span {
   margin: 2px;

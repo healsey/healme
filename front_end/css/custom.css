@@ -1,0 +1,13 @@
+#nav-background-color {
+    /* background-color: black; */
+    background-image: url('../navbar-background.png');
+    font-size: 18px;
+    /* font-family: 'Varela Round', sans-serif; */
+    /* font-family: 'Poppins', sans-serif;  */
+    /* font-family: 'Dosis', sans-serif; */
+}
+
+
+.card {
+    border: 1px black solid;
+}
