@@ -61,48 +61,49 @@ function urlQueryStringGenerator() {
 
 //home page
 function recipesFetch() {
-  // recipesContainer.innerHTML = ""
-  // loader.style.display = "initial";
-  // fetch("http://localhost:3000/recipes")
-  //   .then((resp) => resp.json())
-  //   .then((data) => {
-  //     data.hits.forEach((recipe) => {
-  //       displayRecipe(recipe.recipe, false);
-  //       loader.style.display = "none";
-  //     });
-  //   });
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
+  recipesContainer.innerHTML = ""
+  loader.style.display = "initial";
+  fetch("http://localhost:3000/recipes")
+    .then((resp) => resp.json())
+    .then((data) => {
+      data.hits.forEach((recipe) => {
+        displayRecipe(recipe.recipe, false);
+        loader.style.display = "none";
+      });
+    });
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
 }
 
-function filtersFetch() {
-  // loader.style.display = "initial";
-  // console.log(JSON.parse(sessionStorage.getItem("healme_auth")));
-  // let customUrl = urlQueryStringGenerator();
+function filtersFetch(search_term='null') {
+  recipesContainer.innerHTML = ''; //recently added 
+  loader.style.display = "initial";
+  
+  let customUrl = urlQueryStringGenerator();
 
-  // if (customUrl === "null") {
-  //   recipesFetch();
-  // } else {
-  //   fetch(`http://localhost:3000/recipes/${customUrl}`)
-  //     .then((resp) => resp.json())
-  //     .then((data) => {
-  //       recipesContainer.innerHTML = "";
-  //       data.hits.forEach((recipe) => {
-  //         displayRecipe(recipe.recipe, false);
-  //         loader.style.display = "none";
-  //       });
-  //     });
-  // }
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
-  displayRecipe(recipe, false);
+  if (customUrl === "null" && search_term == 'null') {
+    recipesFetch();
+  } else  {
+    fetch(`http://localhost:3000/recipes/${customUrl}/${search_term}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        recipesContainer.innerHTML = "";
+        data.hits.forEach((recipe) => {
+          displayRecipe(recipe.recipe, false);
+          loader.style.display = "none";
+        });
+      });
+  }
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
+  // displayRecipe(recipe, false);
 }
 
 function displayRecipe(recipe, isSaved) {
@@ -226,7 +227,7 @@ const healthConditionDiv = document.querySelector("#health-condition-div");
 const healthConditions = [
   "Diabetes",
   "Hypertension",
-  "High Cholestrol",
+  "High Cholesterol",
   "Alzheimers",
 ];
 healthConditions.forEach((condition) => {
@@ -253,7 +254,7 @@ allergies.forEach((allergy) => {
 //all api filteration
 const apiOptions = [
   "Alcohol-free",
-  "Immune-Supportive",
+  "Immuno-Supportive",
   "Celery-free",
   "Crustcean-free",
   "Fish",
@@ -292,7 +293,7 @@ function createCheckbox(name, mainTag) {
   const divTag = document.createElement("div");
   divTag.classList.add("form-check");
   divTag.innerHTML = `
-        <input class="form-check-input" type="checkbox" value="" id="${id}">
+        <input class="form-check-input" name="checkbox" type="checkbox" value="" id="${id}">
         <label class="form-check-label" for="${id}">
         ${name}
         </label>
@@ -533,11 +534,103 @@ allFilterTag.addEventListener("click", (e) => filterToggler(e));
 const searchForm = document.querySelector('#search-form')
 searchForm.addEventListener('submit', e => {
   e.preventDefault()
-  console.log(e.target.search.value)
+  filtersFetch(e.target.search.value)
+})
+
+
+// ******************** Create Recipe *******************************
+const addIngredientBtn = document.querySelector('#add-ingredient')
+const ingredientsCreateRecipeDiv = document.querySelector('#ingredients-create-recipe')
+addIngredientBtn.addEventListener('click', e => {
+  ingredientsCreateRecipeDiv.innerHTML += `<input name="ingredients" type="name" class="form-control recipe-name" id="recipe-name">`
+})
+const createRecipeBtn = document.querySelector('#create-recipe-btn')
+createRecipeBtn.addEventListener('click', e => {
+  const healthLabelRecipeCreation = document.querySelector('#health-labels-create-recipe') 
+  const dietLabelRecipeCreation = document.querySelector('#diet-labels-create-recipe')
+
+  healthLabelRecipeCreation.innerHTML = ''
+  dietLabelRecipeCreation.innerHTML = ''
+  healthLabelsOptions.forEach(option => {
+    newRecipeCheckbox(option, healthLabelRecipeCreation)
+  })
+
+dietLabels.forEach(option => {
+  newRecipeCheckbox(option, dietLabelRecipeCreation)
+})
+  
+  $('#create-recipe-modal').modal()
 })
 
 
 
+const createRecipeForm = document.querySelector('#create-recipe-form')
+createRecipeForm.addEventListener('submit', e => {
+  e.preventDefault()
+  const recipeName = e.target.recipeName.value
+  const imageLink = e.target.image.value
+  const healthLabelsArray = []
+  const dietLabelsArray = []
+  const ingredientArray = []
+
+  // console.log(e.target.querySelector('#health-labels-create-recipe'))
+  e.target.querySelector('#health-labels-create-recipe').childNodes.forEach(inn => {
+    if(inn.querySelector('input').checked){
+      healthLabelsArray.push(inn.querySelector('input').id)
+    }
+  })
+
+  e.target.querySelector('#diet-labels-create-recipe').childNodes.forEach(inn => {
+    if(inn.querySelector('input').checked){
+      dietLabelsArray.push(inn.querySelector('input').id)
+    }
+  })
+  
+  e.target.querySelector('#ingredients-create-recipe').childNodes.forEach(inn => {
+    console.log(inn.value)
+    ingredientArray.push(inn.value)
+  })
+  
+  const finalRecipe = {
+    uri: imageLink,
+    label: recipeName,
+    image: imageLink,
+    dietLabels: dietLabelsArray,
+    healthLabels: healthLabelsArray,
+    ingredientLines: ingredientArray,
+    calories: 175
+  }
+
+  saveRecipe(finalRecipe)
+})
+
+
+
+function newRecipeCheckbox(name, mainTag) {
+  const id = name.toLowerCase().replace(" ", "-");
+  const divTag = document.createElement("div");
+  divTag.classList.add("form-check");
+  divTag.innerHTML = `
+        <input class="form-check-input" name="checkbox" type="checkbox" value="" id="${id}">
+        <label class="form-check-label" for="${id}">
+        ${name}
+        </label>
+    `;
+
+  mainTag.append(divTag);
+}
+
+
+const healthLabelsOptions = [
+  "Sugar-Conscious",
+  "Vegan",
+  "Vegetarian",
+  "Peanut-Free",
+  "Tree-Nut-Free",
+  "Alcohol-Free",
+]
+
+const dietLabels = ["High-Protein", "Low-Fat", "Low-Sodium", "Low-Carb"]
 
 const recipe = {
   uri:
@@ -568,3 +661,7 @@ const recipe = {
   dishtype: "dinner",
   calories: 500,
 };
+
+
+
+

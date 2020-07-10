@@ -154,6 +154,13 @@
   margin-left: 10px;
 }
 
+#saved-recipes-container{
+  width: 70%;
+  text-align: center;
+  padding: 4px;
+  margin-left: 10px;
+}
+
 #all-filter-div {
   max-height: 400px;
   overflow-y: scroll;
@@ -177,8 +184,12 @@
 .modal-body img {
   border-radius: 2rem;
   text-align: center;
+  max-width: 90%;
+  max-height: 90%;
   /* width: 100%; */
 }
+
+
 
 .health-span {
   margin: 2px;
