@@ -23,13 +23,13 @@ It is quite a challenge for individuals with chronic health conditions to mainta
 
 
 ## Tech Stack 
--**Backend**
+**Backend**
 1. Ruby on Rails 
 2. ActiveRecord 
 3. Bcrypt for user authentication 
 4. JWT for api authorization 
 
--**Front-end**
+**Front-end**
 1. HTML
 2. CSS
 3. JS
