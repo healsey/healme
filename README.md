@@ -2,7 +2,7 @@
 
 # HealthMe
 
-> Recipe search app for individuals with pre-existing conditions
+> Recipe search app for individuals with food allergies and health conditions
 
 
 
@@ -17,10 +17,22 @@ It is quite a challenge for individuals with chronic health conditions to mainta
 
 
 
-**Demo**
+## Demo
 
 ![Recordit GIF](./assets/demo.gif)
 
+
+## Tech Stack 
+-**Backend**
+1. Ruby on Rails 
+2. ActiveRecord 
+3. Bcrypt for user authentication 
+4. JWT for api authorization 
+
+-**Front-end**
+1. HTML
+2. CSS
+3. JS
 
 
 
