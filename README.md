@@ -9,9 +9,9 @@
 [![Welcome To HealMe](./assets/welcome.png)]()
 
 - Filter recipes by:
-  .Health condition
-  .Allergies
-  .Diet and much more
+  . Health condition
+  . Allergies
+  . Diet and much more
 
 
 
