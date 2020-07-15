@@ -1,5 +1,4 @@
 
-***INSERT GRAPHIC HERE (include hyperlink in image)***
 
 # HealMe
 
