@@ -7,7 +7,7 @@
 
 ***INSERT ANOTHER GRAPHIC HERE***
 
-[![Welcome To HealMe](http://i.imgur.com/)]()
+[![Welcome To HealMe](./assets/welcome.png)]()
 
 - Most people will glance at your `README`, *maybe* star it, and leave
 - Ergo, people should understand instantly what your project is about based on your repo
