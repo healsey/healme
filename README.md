@@ -8,7 +8,7 @@
 
 ***INSERT ANOTHER GRAPHIC HERE***
 
-[![Welcome To HealMe](http://i.imgur.com/dt8AUb6.png)]()
+[![Welcome To HealMe](http://i.imgur.com/)]()
 
 - Most people will glance at your `README`, *maybe* star it, and leave
 - Ergo, people should understand instantly what your project is about based on your repo
@@ -16,7 +16,7 @@
 
 **Demo**
 
-![Recordit GIF](http://g.recordit.co/iLN6A0vSD8.gif)
+![Recordit GIF](http://)
 
 
 
