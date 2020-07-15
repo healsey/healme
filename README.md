@@ -17,7 +17,7 @@
 
 **Demo**
 
-![Recordit GIF](http://)
+![Recordit GIF](./assets/demo.gif)
 
 
 
