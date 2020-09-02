@@ -1,5 +1,4 @@
 
-
 # HealthMe
 
 > Recipe search app for individuals with food allergies and health conditions
@@ -33,6 +32,3 @@ It is quite a challenge for individuals with chronic health conditions to mainta
 1. HTML
 2. CSS
 3. JS
-
-
-
